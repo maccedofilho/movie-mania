@@ -1,0 +1,25 @@
+{
+  "name": "movie-mania",
+  "version": "1.0.0",
+  "description": "Projeto de Testes de Software N2 - TDD com Mocha/Chai",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "mocha --recursive test/**/*.test.js",
+    "test:unit": "mocha test/unit/**/*.test.js",
+    "test:api": "mocha test/api/**/*.test.js",
+    "test:integration": "mocha test/integration/**/*.test.js"
+  },
+  "keywords": [
+    "tdd",
+    "mocha",
+    "chai",
+    "testes",
+    "esm"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}

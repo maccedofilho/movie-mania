@@ -1,0 +1,90 @@
+# 🎬 MovieMania — Plataforma de Catálogo de Filmes
+
+Projeto desenvolvido como avaliação **N2** da disciplina de **Testes de Software**. O MovieMania é uma plataforma onde usuários podem explorar filmes, criar listas de assistidos e compartilhar avaliações. O foco do projeto é a aplicação de **TDD (Test-Driven Development)** com diferentes tipos de testes automatizados utilizando **Mocha**, **Chai** e **Sinon**.
+
+## 🎯 Objetivos
+
+- Desenvolver um projeto Node.js do zero com estrutura de pastas definida.
+- Aplicar TDD na construção do software.
+- Implementar testes unitários, mockados/stubados e de API.
+- Demonstrar o uso de `assert`, `expect` e `should` do Mocha/Chai.
+
+## 🗂️ Estrutura do Projeto
+movie-mania/
+├── src/
+│   ├── controllers/       # Controladores das rotas
+│   ├── models/            # Modelos de dados
+│   ├── repositories/      # Camada de acesso a dados
+│   ├── routes/            # Definição de rotas
+│   ├── services/          # Regras de negócio
+│   ├── utils/             # Funções utilitárias
+│   └── app.js             # Ponto de entrada da aplicação
+├── test/
+│   ├── api/               # Testes de API (mockados com Sinon)
+│   ├── integration/       # Testes de integração
+│   └── unit/              # Testes unitários (assert, expect, should)
+├── package.json
+└── README.md
+
+> ⚠️ O projeto utiliza **ESM** (ECMAScript Modules).
+
+## 🚀 Tecnologias Utilizadas
+
+- **Node.js**
+- **Mocha** — framework de testes
+- **Chai** — biblioteca de asserções (assert, expect, should)
+- **Sinon** — mocks e stubs para testes de API
+
+## 📋 Funcionalidades
+
+### Para Usuários
+
+- Cadastro e autenticação.
+- Exploração de filmes organizados por gêneros.
+- Adicionar filmes a listas de "assistidos" ou "a assistir".
+- Favoritar títulos e avaliar experiências.
+- Comentários nos filmes.
+
+### Para Administradores
+
+- Dashboard administrativo com estatísticas.
+- Cadastro e gerenciamento de filmes e gêneros.
+- Controle de usuários e permissões.
+
+## ✅ Testes Implementados
+
+### Testes Unitários (`test/unit/`) — mínimo 20
+
+| Estilo   | Qtd. Mínima | Exemplos de Variações                                                            |
+|----------|-------------|-----------------------------------------------------------------------------------|
+| `assert` | 5           | `strictEqual`, `deepEqual`, `throws`, `doesNotThrow`, `match`                    |
+| `expect` | 5           | `.to.equal`, `.to.have.property`, `.to.be.a`, `.to.contain`, `.to.have.lengthOf` |
+| `should` | 5           | `.should.equal`, `.should.be.a`, `.should.have.property`, entre outros            |
+
+### Testes Mockados/Stubados com Sinon (`test/api/`) — mínimo 5
+
+Testes que simulam chamadas de API utilizando `sinon.stub()` para isolar dependências externas.
+
+## 📦 Instalação
+
+```bash
+git clone https://github.com/seu-usuario/movie-mania.git
+cd movie-mania
+npm install
+```
+
+## 🧪 Como Rodar os Testes
+
+```bash
+npm test
+```
+
+Todos os testes devem passar com sucesso ao executar o comando acima.
+
+## 👤 Autor
+
+- **Seu Nome** — [seu-usuario](https://github.com/seu-usuario)
+
+## 📄 Licença
+
+Este projeto é de uso acadêmico e foi desenvolvido para fins de avaliação.
