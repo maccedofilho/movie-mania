@@ -23,10 +23,6 @@ describe('Like + DB (integração - expect)', () => {
     movie = await Movie.create({ title: 'Matrix', year: 1999 });
   });
 
-  after(async () => {
-    await sequelize.close();
-  });
-
   it('deve permitir um usuário curtir um filme', async () => {
     const like = await likeService.like(user.id, movie.id);
 

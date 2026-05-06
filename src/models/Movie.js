@@ -13,6 +13,10 @@ export const Movie = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    director: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     year: {
       type: DataTypes.INTEGER,
       allowNull: false,

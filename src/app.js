@@ -1,5 +1,6 @@
 import express from 'express';
 import './models/index.js';
+import movieRoutes from './routes/movieRoutes.js';
 
 export const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,6 +10,8 @@ app.use(express.json());
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+app.use('/movies', movieRoutes);
 
 app.get('/', (req, res) => {
   res.send(`

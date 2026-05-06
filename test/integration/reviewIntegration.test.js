@@ -26,10 +26,6 @@ describe('Review + DB (integração - expect)', () => {
     });
   });
 
-  after(async () => {
-    await sequelize.close();
-  });
-
   it('deve criar uma review associada a usuário e filme', async () => {
     const review = await reviewService.create({
       userId: user.id,

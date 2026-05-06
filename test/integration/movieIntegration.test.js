@@ -12,10 +12,6 @@ describe('Movie + DB (integração - expect)', () => {
     await Genre.destroy({ where: {} });
   });
 
-  after(async () => {
-    await sequelize.close();
-  });
-
   it('deve persistir um filme no banco de dados', async () => {
     const created = await movieService.create({
       title: 'Matrix',
