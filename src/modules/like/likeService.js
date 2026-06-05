@@ -1,4 +1,4 @@
-import { Like } from '../models/Like.js';
+import { Like } from './Like.js';
 
 export async function like(userId, movieId) {
   return Like.create({ userId, movieId });

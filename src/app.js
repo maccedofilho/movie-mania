@@ -1,25 +1,18 @@
 import express from 'express';
-import './models/index.js';
-import movieRoutes from './routes/movieRoutes.js';
+import './database/setup.js';
+import movieRoutes from './modules/movie/movieRoutes.js';
 
 export const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
 app.use('/movies', movieRoutes);
-
-app.get('/', (req, res) => {
-  res.send(`
-    <html>
-        <h1>Movie Mania</h1>
-    </html>
-  `);
-});
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   app.listen(PORT, () => {

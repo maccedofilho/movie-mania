@@ -1,13 +1,11 @@
-import crypto from 'node:crypto';
-import { User } from '../models/User.js';
-import { validateUser } from '../utils/userValidator.js';
+import bcrypt from 'bcryptjs';
+import { User } from './User.js';
+import { validateUser } from './userValidator.js';
 
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(password).digest('hex');
-}
+const SALT_ROUNDS = 10;
 
 export async function verifyPassword(plain, hash) {
-  return hashPassword(plain) === hash;
+  return bcrypt.compare(plain, hash);
 }
 
 export async function register(data) {
@@ -23,10 +21,12 @@ export async function register(data) {
     throw new Error('email já está em uso');
   }
 
+  const hashed = await bcrypt.hash(data.password, SALT_ROUNDS);
+
   return User.create({
     name: data.name,
     email: data.email,
-    password: hashPassword(data.password),
+    password: hashed,
   });
 }
 

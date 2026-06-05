@@ -1,12 +1,12 @@
 import { sequelize } from '../config/database.js';
-import { User } from './User.js';
-import { Movie } from './Movie.js';
-import { Genre } from './Genre.js';
-import { Director } from './Director.js';
-import { Actor } from './Actor.js';
-import { Review } from './Review.js';
-import { MovieActor } from './MovieActor.js';
-import { Like } from './Like.js';
+import { User } from '../modules/user/User.js';
+import { Movie } from '../modules/movie/Movie.js';
+import { Genre } from '../modules/genre/Genre.js';
+import { Director } from '../modules/director/Director.js';
+import { Actor } from '../modules/actor/Actor.js';
+import { Review } from '../modules/review/Review.js';
+import { MovieActor } from '../modules/movie/MovieActor.js';
+import { Like } from '../modules/like/Like.js';
 
 Genre.hasMany(Movie, { foreignKey: 'genreId' });
 Movie.belongsTo(Genre, { foreignKey: 'genreId' });

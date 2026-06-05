@@ -1,12 +1,12 @@
-import { expect } from 'chai';
-import { sequelize, User, Movie, Review } from '../../src/models/index.js';
-import * as reviewService from '../../src/services/reviewService.js';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { sequelize, User, Movie, Review } from '../../src/database/setup.js';
+import * as reviewService from '../../src/modules/review/reviewService.js';
 
-describe('Review + DB (integração - expect)', () => {
+describe('Review + DB (integração)', () => {
   let user;
   let movie;
 
-  before(async () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
   });
 
@@ -34,23 +34,20 @@ describe('Review + DB (integração - expect)', () => {
       comment: 'Excelente filme',
     });
 
-    expect(review).to.have.property('id');
-    expect(review.userId).to.equal(user.id);
-    expect(review.movieId).to.equal(movie.id);
-    expect(review.rating).to.equal(9);
+    expect(review).toHaveProperty('id');
+    expect(review.userId).toBe(user.id);
+    expect(review.movieId).toBe(movie.id);
+    expect(review.rating).toBe(9);
   });
 
   it('deve rejeitar rating fora da faixa 1-10', async () => {
-    try {
-      await reviewService.create({
+    await expect(
+      reviewService.create({
         userId: user.id,
         movieId: movie.id,
         rating: 11,
-      });
-      expect.fail('deveria ter rejeitado rating inválido');
-    } catch (err) {
-      expect(err).to.be.an('error');
-    }
+      })
+    ).rejects.toThrow();
   });
 
   it('deve calcular a média de ratings de um filme', async () => {
@@ -64,7 +61,7 @@ describe('Review + DB (integração - expect)', () => {
 
     const avg = await reviewService.averageRating(movie.id);
 
-    expect(avg).to.equal(9);
+    expect(avg).toBe(9);
   });
 
   it('deve listar reviews de um filme com o usuário associado', async () => {
@@ -77,8 +74,8 @@ describe('Review + DB (integração - expect)', () => {
 
     const reviews = await reviewService.listByMovie(movie.id);
 
-    expect(reviews).to.have.lengthOf(1);
-    expect(reviews[0].User).to.not.be.null;
-    expect(reviews[0].User.name).to.equal('João');
+    expect(reviews).toHaveLength(1);
+    expect(reviews[0].User).not.toBeNull();
+    expect(reviews[0].User.name).toBe('João');
   });
 });

@@ -1,12 +1,12 @@
-import { expect } from 'chai';
-import { sequelize, User, Movie, Like } from '../../src/models/index.js';
-import * as likeService from '../../src/services/likeService.js';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { sequelize, User, Movie, Like } from '../../src/database/setup.js';
+import * as likeService from '../../src/modules/like/likeService.js';
 
-describe('Like + DB (integração - expect)', () => {
+describe('Like + DB (integração)', () => {
   let user;
   let movie;
 
-  before(async () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
   });
 
@@ -26,20 +26,15 @@ describe('Like + DB (integração - expect)', () => {
   it('deve permitir um usuário curtir um filme', async () => {
     const like = await likeService.like(user.id, movie.id);
 
-    expect(like).to.have.property('id');
-    expect(like.userId).to.equal(user.id);
-    expect(like.movieId).to.equal(movie.id);
+    expect(like).toHaveProperty('id');
+    expect(like.userId).toBe(user.id);
+    expect(like.movieId).toBe(movie.id);
   });
 
   it('deve impedir o mesmo usuário curtir o mesmo filme duas vezes', async () => {
     await likeService.like(user.id, movie.id);
 
-    try {
-      await likeService.like(user.id, movie.id);
-      expect.fail('deveria ter rejeitado like duplicado');
-    } catch (err) {
-      expect(err).to.be.an('error');
-    }
+    await expect(likeService.like(user.id, movie.id)).rejects.toThrow();
   });
 
   it('deve permitir descurtir um filme curtido', async () => {
@@ -48,8 +43,8 @@ describe('Like + DB (integração - expect)', () => {
     const removed = await likeService.unlike(user.id, movie.id);
     const count = await Like.count({ where: { userId: user.id, movieId: movie.id } });
 
-    expect(removed).to.be.true;
-    expect(count).to.equal(0);
+    expect(removed).toBe(true);
+    expect(count).toBe(0);
   });
 
   it('deve contar quantos likes um filme possui', async () => {
@@ -63,6 +58,6 @@ describe('Like + DB (integração - expect)', () => {
 
     const total = await likeService.countByMovie(movie.id);
 
-    expect(total).to.equal(2);
+    expect(total).toBe(2);
   });
 });

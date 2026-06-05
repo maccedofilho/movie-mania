@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Mania</title>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              '-apple-system',
+              'BlinkMacSystemFont',
+              'SF Pro Text',
+              'Inter',
+              'Helvetica Neue',
+              'Arial',
+              'sans-serif',
+            ],
+          },
+          colors: {
+            accent: { DEFAULT: '#0071e3', hover: '#0077ed' },
+          },
+          animation: {
+            'fade-in': 'fadeIn 200ms ease-out',
+            'scale-in': 'scaleIn 200ms cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.96)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body { letter-spacing: -0.011em; }
+    .glass {
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+    .poster {
+      aspect-ratio: 2 / 3;
+      position: relative;
+      overflow: hidden;
+    }
+    .poster::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    }
+    .gradient-0 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .gradient-1 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .gradient-2 { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .gradient-3 { background: linear-gradient(135deg, #30cfd0, #330867); }
+    .gradient-4 { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+    .gradient-5 { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+    .gradient-6 { background: linear-gradient(135deg, #84fab0, #8fd3f4); }
+    .gradient-7 { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+    .gradient-8 { background: linear-gradient(135deg, #5ee7df, #b490ca); }
+    .gradient-9 { background: linear-gradient(135deg, #c471f5, #fa71cd); }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 min-h-screen font-sans">
+
+  <header class="sticky top-0 z-20 glass bg-white/70 dark:bg-neutral-950/70 border-b border-neutral-200/70 dark:border-neutral-800/70">
+    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white text-xs font-bold">M</div>
+        <span class="text-sm font-semibold tracking-tight">Movie Mania</span>
+      </div>
+
+      <div class="flex-1 max-w-md mx-auto">
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
+          <input
+            id="search"
+            type="text"
+            placeholder="Buscar filmes…"
+            class="w-full pl-9 pr-3 py-1.5 text-sm bg-neutral-100 dark:bg-neutral-900 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:bg-white dark:focus:bg-neutral-900 focus:border-accent/40 transition placeholder:text-neutral-400"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-1.5 text-xs px-2">
+          <span id="health-dot" class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span>
+          <span id="health-text" class="text-neutral-500 dark:text-neutral-400 hidden sm:inline">online</span>
+        </div>
+        <button id="theme-toggle" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 text-neutral-600 dark:text-neutral-400 transition" aria-label="Alternar tema">
+          <svg id="icon-sun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+          <svg id="icon-moon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+        <button id="open-add" class="flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-white text-xs font-medium px-3 py-1.5 rounded-lg transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Novo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12">
+
+    <section class="mb-12">
+      <h1 class="text-4xl font-semibold tracking-tight mb-2">Sua coleção</h1>
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">Filmes que marcaram, organizados do jeito que você quiser.</p>
+    </section>
+
+    <section class="grid grid-cols-3 gap-3 mb-12">
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
+        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Total de filmes</div>
+        <div class="text-2xl font-semibold tracking-tight" id="stat-total">0</div>
+      </div>
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
+        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Nota média</div>
+        <div class="text-2xl font-semibold tracking-tight" id="stat-avg">—</div>
+      </div>
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
+        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Diretores únicos</div>
+        <div class="text-2xl font-semibold tracking-tight" id="stat-directors">0</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          Biblioteca
+        </h2>
+        <div class="flex items-center gap-3">
+          <select id="sort" class="text-xs bg-transparent border-none focus:outline-none focus:ring-0 text-neutral-500 dark:text-neutral-400 cursor-pointer">
+            <option value="year-desc">Mais recentes</option>
+            <option value="year-asc">Mais antigos</option>
+            <option value="title">Título (A–Z)</option>
+            <option value="rating">Melhor avaliados</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="movie-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+
+      <div id="empty-state" class="text-center py-20 hidden">
+        <div class="text-5xl mb-3 opacity-30">🎞️</div>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">Sua coleção está vazia.</p>
+        <button onclick="document.querySelector('#open-add').click()" class="mt-4 text-xs text-accent hover:underline">
+          Adicionar o primeiro filme
+        </button>
+      </div>
+
+      <div id="no-results" class="text-center py-20 hidden">
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">Nenhum filme encontrado.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <dialog id="add-dialog" class="bg-transparent p-0 m-auto outline-none">
+    <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl shadow-2xl w-[420px] max-w-[92vw] animate-scale-in">
+      <header class="px-6 pt-5 pb-3 flex items-center justify-between border-b border-neutral-200/70 dark:border-neutral-800/70">
+        <h3 class="text-base font-semibold tracking-tight">Novo filme</h3>
+        <button id="close-add" class="text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition" aria-label="Fechar">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+      <form id="movie-form" class="p-6 space-y-3">
+        <input
+          name="title"
+          required
+          placeholder="Título"
+          class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400"
+        />
+        <input
+          name="director"
+          required
+          placeholder="Diretor"
+          class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400"
+        />
+        <div class="grid grid-cols-2 gap-2">
+          <input
+            name="year"
+            type="number"
+            required
+            placeholder="Ano"
+            class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400"
+          />
+          <input
+            name="duration"
+            type="number"
+            placeholder="Duração (min)"
+            class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400"
+          />
+        </div>
+        <input
+          name="rating"
+          type="number"
+          step="0.1"
+          min="0"
+          max="10"
+          placeholder="Nota (0–10)"
+          class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400"
+        />
+        <textarea
+          name="synopsis"
+          rows="3"
+          placeholder="Sinopse"
+          class="w-full px-3 py-2 text-sm bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition placeholder:text-neutral-400 resize-none"
+        ></textarea>
+        <div id="form-feedback" class="text-xs min-h-[1rem]"></div>
+        <div class="flex gap-2 pt-1">
+          <button
+            type="button"
+            id="cancel-add"
+            class="flex-1 text-sm font-medium py-2 rounded-lg bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 transition"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="flex-1 bg-accent hover:bg-accent-hover text-white text-sm font-medium py-2 rounded-lg transition"
+          >
+            Adicionar
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="detail-dialog" class="bg-transparent p-0 m-auto outline-none">
+    <div id="detail-content" class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl shadow-2xl w-[480px] max-w-[92vw] overflow-hidden animate-scale-in"></div>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-import { Movie } from '../models/Movie.js';
-import { validateMovie } from '../utils/movieValidator.js';
+import { Movie } from './Movie.js';
+import { validateMovie } from './movieValidator.js';
 
 export async function list() {
   return Movie.findAll();

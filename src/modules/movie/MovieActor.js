@@ -1,22 +1,21 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.js';
+import { sequelize } from '../../config/database.js';
 
-export const Genre = sequelize.define(
-  'Genre',
+export const MovieActor = sequelize.define(
+  'MovieActor',
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    characterName: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: true,
     },
   },
   {
-    tableName: 'genres',
+    tableName: 'movie_actors',
     timestamps: true,
   }
 );

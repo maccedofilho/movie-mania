@@ -1,4 +1,4 @@
-import * as movieService from '../services/movieService.js';
+import * as movieService from './movieService.js';
 
 export async function list(req, res) {
   const movies = await movieService.list();

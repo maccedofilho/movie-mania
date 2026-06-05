@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-import { sequelize, Movie, Genre } from '../../src/models/index.js';
-import * as movieService from '../../src/services/movieService.js';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { sequelize, Movie, Genre } from '../../src/database/setup.js';
+import * as movieService from '../../src/modules/movie/movieService.js';
 
-describe('Movie + DB (integração - expect)', () => {
-  before(async () => {
+describe('Movie + DB (integração)', () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
   });
 
@@ -21,10 +21,10 @@ describe('Movie + DB (integração - expect)', () => {
 
     const found = await Movie.findByPk(created.id);
 
-    expect(found).to.not.be.null;
-    expect(found.title).to.equal('Matrix');
-    expect(found.director).to.equal('Wachowski');
-    expect(found.year).to.equal(1999);
+    expect(found).not.toBeNull();
+    expect(found.title).toBe('Matrix');
+    expect(found.director).toBe('Wachowski');
+    expect(found.year).toBe(1999);
   });
 
   it('deve listar todos os filmes persistidos', async () => {
@@ -34,7 +34,7 @@ describe('Movie + DB (integração - expect)', () => {
 
     const all = await movieService.list();
 
-    expect(all).to.have.lengthOf(3);
+    expect(all).toHaveLength(3);
   });
 
   it('deve buscar um filme por id no banco', async () => {
@@ -46,8 +46,8 @@ describe('Movie + DB (integração - expect)', () => {
 
     const found = await movieService.getById(created.id);
 
-    expect(found).to.not.be.null;
-    expect(found.title).to.equal('Interestelar');
+    expect(found).not.toBeNull();
+    expect(found.title).toBe('Interestelar');
   });
 
   it('deve atualizar um filme existente', async () => {
@@ -59,10 +59,10 @@ describe('Movie + DB (integração - expect)', () => {
 
     const updated = await movieService.update(created.id, { title: 'Novo' });
 
-    expect(updated.title).to.equal('Novo');
+    expect(updated.title).toBe('Novo');
 
     const reloaded = await Movie.findByPk(created.id);
-    expect(reloaded.title).to.equal('Novo');
+    expect(reloaded.title).toBe('Novo');
   });
 
   it('deve remover um filme do banco', async () => {
@@ -75,8 +75,8 @@ describe('Movie + DB (integração - expect)', () => {
     const removed = await movieService.remove(created.id);
     const found = await Movie.findByPk(created.id);
 
-    expect(removed).to.be.true;
-    expect(found).to.be.null;
+    expect(removed).toBe(true);
+    expect(found).toBeNull();
   });
 
   it('deve associar um filme a um gênero', async () => {
@@ -90,7 +90,7 @@ describe('Movie + DB (integração - expect)', () => {
 
     const withGenre = await Movie.findByPk(movie.id, { include: Genre });
 
-    expect(withGenre.Genre).to.not.be.null;
-    expect(withGenre.Genre.name).to.equal('Ficção Científica');
+    expect(withGenre.Genre).not.toBeNull();
+    expect(withGenre.Genre.name).toBe('Ficção Científica');
   });
 });

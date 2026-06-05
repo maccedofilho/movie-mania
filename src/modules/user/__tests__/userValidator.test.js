@@ -1,7 +1,7 @@
-import { assert } from 'chai';
-import { validateUser } from '../../src/utils/userValidator.js';
+import { describe, it, expect } from 'vitest';
+import { validateUser } from '../userValidator.js';
 
-describe('userValidator (unit - assert)', () => {
+describe('userValidator (unit)', () => {
   describe('validateUser', () => {
     it('deve retornar valid=true para um usuário com todos os campos válidos', () => {
       const result = validateUser({
@@ -10,9 +10,8 @@ describe('userValidator (unit - assert)', () => {
         password: '123456',
       });
 
-      assert.isTrue(result.valid);
-      assert.isArray(result.errors);
-      assert.lengthOf(result.errors, 0);
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
     });
 
     it('deve invalidar quando o email não tiver formato válido', () => {
@@ -22,8 +21,8 @@ describe('userValidator (unit - assert)', () => {
         password: '123456',
       });
 
-      assert.isFalse(result.valid);
-      assert.include(result.errors, 'email inválido');
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain('email inválido');
     });
 
     it('deve invalidar quando a senha tiver menos de 6 caracteres', () => {
@@ -33,8 +32,8 @@ describe('userValidator (unit - assert)', () => {
         password: '123',
       });
 
-      assert.isFalse(result.valid);
-      assert.include(result.errors, 'password deve ter no mínimo 6 caracteres');
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain('password deve ter no mínimo 6 caracteres');
     });
 
     it('deve invalidar quando o nome estiver vazio', () => {
@@ -44,8 +43,8 @@ describe('userValidator (unit - assert)', () => {
         password: '123456',
       });
 
-      assert.isFalse(result.valid);
-      assert.include(result.errors, 'name é obrigatório');
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain('name é obrigatório');
     });
   });
 });

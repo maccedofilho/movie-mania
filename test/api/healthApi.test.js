@@ -1,24 +1,22 @@
-import { should } from 'chai';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 
-should();
-
-describe('Health API (should)', () => {
+describe('Health API', () => {
   describe('GET /health', () => {
     it('deve retornar 200', async () => {
       const res = await request(app).get('/health');
-      res.status.should.equal(200);
+      expect(res.status).toBe(200);
     });
 
     it('deve retornar status ok no corpo', async () => {
       const res = await request(app).get('/health');
-      res.body.should.have.property('status', 'ok');
+      expect(res.body).toHaveProperty('status', 'ok');
     });
 
     it('deve retornar JSON', async () => {
       const res = await request(app).get('/health');
-      res.headers['content-type'].should.match(/application\/json/);
+      expect(res.headers['content-type']).toMatch(/application\/json/);
     });
   });
 });

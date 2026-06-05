@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.js';
+import { sequelize } from '../../config/database.js';
 
-export const Actor = sequelize.define(
-  'Actor',
+export const User = sequelize.define(
+  'User',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -13,17 +13,19 @@ export const Actor = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    birthYear: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    nationality: {
+    email: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      unique: true,
+      validate: { isEmail: true },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
-    tableName: 'actors',
+    tableName: 'users',
     timestamps: true,
   }
 );

@@ -1,12 +1,10 @@
-import { should } from 'chai';
+import { describe, it, expect, beforeAll } from 'vitest';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 import { sequelize } from '../../src/config/database.js';
 
-should();
-
-describe('Movie API (should)', () => {
-  before(async () => {
+describe('Movie API', () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
   });
 
@@ -16,19 +14,19 @@ describe('Movie API (should)', () => {
         .post('/movies')
         .send({ title: 'Matrix', director: 'Wachowski', year: 1999 });
 
-      res.status.should.equal(201);
-      res.body.should.have.property('id');
-      res.body.title.should.equal('Matrix');
-      res.body.director.should.equal('Wachowski');
-      res.body.year.should.equal(1999);
+      expect(res.status).toBe(201);
+      expect(res.body).toHaveProperty('id');
+      expect(res.body.title).toBe('Matrix');
+      expect(res.body.director).toBe('Wachowski');
+      expect(res.body.year).toBe(1999);
     });
 
     it('deve retornar 400 quando dados forem inválidos', async () => {
       const res = await request(app).post('/movies').send({});
 
-      res.status.should.equal(400);
-      res.body.should.have.property('errors');
-      res.body.errors.should.be.an('array').that.is.not.empty;
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('errors');
+      expect(res.body.errors.length).toBeGreaterThan(0);
     });
   });
 
@@ -36,8 +34,8 @@ describe('Movie API (should)', () => {
     it('deve retornar 200 e uma lista de filmes', async () => {
       const res = await request(app).get('/movies');
 
-      res.status.should.equal(200);
-      res.body.should.be.an('array');
+      expect(res.status).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
     });
   });
 
@@ -49,14 +47,14 @@ describe('Movie API (should)', () => {
 
       const res = await request(app).get(`/movies/${created.body.id}`);
 
-      res.status.should.equal(200);
-      res.body.title.should.equal('Inception');
+      expect(res.status).toBe(200);
+      expect(res.body.title).toBe('Inception');
     });
 
     it('deve retornar 404 quando o filme não existir', async () => {
       const res = await request(app).get('/movies/999999');
 
-      res.status.should.equal(404);
+      expect(res.status).toBe(404);
     });
   });
 
@@ -70,8 +68,8 @@ describe('Movie API (should)', () => {
         .put(`/movies/${created.body.id}`)
         .send({ title: 'Novo Título' });
 
-      res.status.should.equal(200);
-      res.body.title.should.equal('Novo Título');
+      expect(res.status).toBe(200);
+      expect(res.body.title).toBe('Novo Título');
     });
 
     it('deve retornar 404 ao atualizar filme inexistente', async () => {
@@ -79,7 +77,7 @@ describe('Movie API (should)', () => {
         .put('/movies/999999')
         .send({ title: 'Qualquer' });
 
-      res.status.should.equal(404);
+      expect(res.status).toBe(404);
     });
   });
 
@@ -91,13 +89,13 @@ describe('Movie API (should)', () => {
 
       const res = await request(app).delete(`/movies/${created.body.id}`);
 
-      res.status.should.equal(204);
+      expect(res.status).toBe(204);
     });
 
     it('deve retornar 404 ao deletar filme inexistente', async () => {
       const res = await request(app).delete('/movies/999999');
 
-      res.status.should.equal(404);
+      expect(res.status).toBe(404);
     });
   });
 });

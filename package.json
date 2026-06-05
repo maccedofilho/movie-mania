@@ -1,34 +1,32 @@
 {
   "name": "movie-mania",
   "version": "1.0.0",
-  "description": "Projeto de Testes de Software N2 - TDD com Mocha/Chai",
+  "description": "Projeto de Testes de Software N2 - TDD com Vitest",
   "type": "module",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "mocha --recursive test/**/*.test.js",
-    "test:unit": "mocha test/unit/**/*.test.js",
-    "test:api": "mocha test/api/**/*.test.js",
-    "test:integration": "mocha test/integration/**/*.test.js"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [
     "tdd",
-    "mocha",
-    "chai",
+    "vitest",
     "testes",
     "esm"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
     "sequelize": "^6.37.8",
     "sqlite3": "^6.0.1"
   },
   "devDependencies": {
-    "chai": "^6.2.2",
-    "mocha": "^11.7.5",
-    "sinon": "^22.0.0",
-    "supertest": "^7.2.2"
+    "@vitest/coverage-v8": "^2.1.9",
+    "supertest": "^7.2.2",
+    "vitest": "^2.1.9"
   }
 }
