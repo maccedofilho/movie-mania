@@ -86,6 +86,39 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
+    .tab-active {
+      background: white;
+      color: #171717;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .dark .tab-active {
+      background: #262626;
+      color: white;
+    }
+    .wfilter-active {
+      background: #0071e3;
+      color: white;
+      border-color: #0071e3 !important;
+    }
+    .empty-heart { fill: none; }
+    .watchlist-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 5;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+    }
+    .watchlist-badge.watched { background: rgba(16, 185, 129, 0.9); }
+    .watchlist-badge.to-watch { background: rgba(0, 113, 227, 0.9); }
   </style>
 </head>
 <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 min-h-screen font-sans">
@@ -141,7 +174,7 @@
       <p class="text-sm text-neutral-500 dark:text-neutral-400">Filmes que marcaram, organizados do jeito que você quiser.</p>
     </section>
 
-    <section class="grid grid-cols-3 gap-3 mb-12">
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
       <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
         <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Total de filmes</div>
         <div class="text-2xl font-semibold tracking-tight" id="stat-total">0</div>
@@ -151,14 +184,43 @@
         <div class="text-2xl font-semibold tracking-tight" id="stat-avg">—</div>
       </div>
       <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
-        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Diretores únicos</div>
-        <div class="text-2xl font-semibold tracking-tight" id="stat-directors">0</div>
+        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">A assistir</div>
+        <div class="text-2xl font-semibold tracking-tight text-accent" id="stat-to-watch">0</div>
+      </div>
+      <div class="bg-white dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800/70 rounded-2xl p-4">
+        <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Assistidos</div>
+        <div class="text-2xl font-semibold tracking-tight text-emerald-500" id="stat-watched">0</div>
+      </div>
+    </section>
+
+    <section class="mb-6">
+      <div class="inline-flex items-center gap-1 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-xl">
+        <button data-tab="collection" class="tab-btn tab-active px-4 py-1.5 text-sm font-medium rounded-lg transition">
+          Coleção
+        </button>
+        <button data-tab="watchlist" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">
+          Watchlist
+        </button>
+      </div>
+    </section>
+
+    <section id="watchlist-filters" class="mb-4 hidden">
+      <div class="flex items-center gap-2">
+        <button data-wfilter="all" class="wfilter-btn wfilter-active text-xs px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 transition">
+          Todos
+        </button>
+        <button data-wfilter="to_watch" class="wfilter-btn text-xs px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 transition text-neutral-500 dark:text-neutral-400">
+          A assistir
+        </button>
+        <button data-wfilter="watched" class="wfilter-btn text-xs px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 transition text-neutral-500 dark:text-neutral-400">
+          Assistidos
+        </button>
       </div>
     </section>
 
     <section>
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <h2 class="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400" id="section-label">
           Biblioteca
         </h2>
         <div class="flex items-center gap-3">
@@ -183,6 +245,12 @@
 
       <div id="no-results" class="text-center py-20 hidden">
         <p class="text-sm text-neutral-500 dark:text-neutral-400">Nenhum filme encontrado.</p>
+      </div>
+
+      <div id="empty-watchlist" class="text-center py-20 hidden">
+        <div class="text-5xl mb-3 opacity-30">📌</div>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">Sua watchlist está vazia.</p>
+        <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Abra um filme na aba Coleção e clique em "Adicionar à watchlist".</p>
       </div>
     </section>
 

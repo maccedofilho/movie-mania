@@ -7,6 +7,7 @@ import { Actor } from '../modules/actor/Actor.js';
 import { Review } from '../modules/review/Review.js';
 import { MovieActor } from '../modules/movie/MovieActor.js';
 import { Like } from '../modules/like/Like.js';
+import { Watchlist } from '../modules/watchlist/Watchlist.js';
 
 Genre.hasMany(Movie, { foreignKey: 'genreId' });
 Movie.belongsTo(Genre, { foreignKey: 'genreId' });
@@ -25,7 +26,23 @@ Review.belongsTo(Movie, { foreignKey: 'movieId' });
 User.belongsToMany(Movie, { through: Like, foreignKey: 'userId', as: 'LikedMovies' });
 Movie.belongsToMany(User, { through: Like, foreignKey: 'movieId', as: 'LikedBy' });
 
+User.hasMany(Watchlist, { foreignKey: 'userId' });
+Watchlist.belongsTo(User, { foreignKey: 'userId' });
+Movie.hasMany(Watchlist, { foreignKey: 'movieId' });
+Watchlist.belongsTo(Movie, { foreignKey: 'movieId' });
+
 await sequelize.sync();
+
+if (process.env.NODE_ENV !== 'test') {
+  await User.findOrCreate({
+    where: { email: 'demo@moviemania.local' },
+    defaults: {
+      name: 'Demo',
+      email: 'demo@moviemania.local',
+      password: 'demo-hash',
+    },
+  });
+}
 
 export {
   sequelize,
@@ -37,4 +54,5 @@ export {
   Review,
   MovieActor,
   Like,
+  Watchlist,
 };
