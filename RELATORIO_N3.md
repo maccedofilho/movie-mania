@@ -221,21 +221,22 @@ it('deve retornar 409 quando o filme já estiver na watchlist', async () => {
 | Módulo | Unit | Integração | Total |
 |---|---|---|---|
 | `movie` (N2) | 24 (movieService 18 + movieValidator 6) | 6 + 9 API | 39 |
-| `user` (N2) | 8 (userService 4 + userValidator 4) | — | 8 |
+| `user` | 13 (userService 9 + userValidator 4) | — | 13 |
 | `review` | — | 4 | 4 |
 | `like` | — | 4 | 4 |
 | `health` | — | 3 API | 3 |
 | **`watchlist` (N3)** | **14** | **13** | **27** |
-| **Total** | **46** | **39** | **85** |
+| **Total** | **51** | **39** | **90** |
 
-### Cobertura nos dois módulos exigidos (N3 Nota 7)
+### Cobertura nos módulos exigidos (N3 Nota 7)
 
 | Módulo | Stmts | Branch | Funcs | Lines |
 |---|---|---|---|---|
 | **`movieService.js`** (módulo central da N2) | 100% | 100% | 100% | **100%** |
+| **`userService.js`** (módulo user citado no spec) | 100% | 100% | 100% | **100%** |
 | **`watchlistService.js`** (módulo central da N3) | 100% | 100% | 100% | **100%** |
 
-Exigência: ≥80% de linhas e funções em cada módulo. **Ambos atingem 100%**.
+Exigência: ≥80% de linhas e funções em cada módulo. **Todos atingem 100%**, blindado contra qualquer interpretação do spec.
 
 ### Configuração de coverage (`vitest.config.js`)
 
@@ -277,8 +278,8 @@ npm start            # sobe servidor + front-end em http://localhost:3000
 - ✅ 4 camadas: Model, Service, Controller, Routes
 - ✅ ≥10 testes unitários no novo módulo (**14**)
 - ✅ ≥10 testes de integração com **Service mockado** via `vi.mock` (**13**)
-- ✅ ≥20 testes unitários totais nos 2 módulos (movie 24 + watchlist 14 = **38**)
-- ✅ Cobertura ≥80% nos 2 módulos (movie + watchlist, ambos **100%**)
+- ✅ ≥20 testes unitários totais nos módulos (movie 24 + user 13 + watchlist 14 = **51**)
+- ✅ Cobertura ≥80% nos módulos exigidos (movie + user + watchlist, **todos 100%**)
 - ✅ Exclusions: `config/**`, `middlewares/**`, `server.js`, `app.js`
 - ✅ Asserções variadas: `toBe`, `toEqual`, `toHaveProperty`, `toHaveLength`, `toContain`, `toBeNull`, `toBeInstanceOf`, `rejects.toThrow`, `toHaveBeenCalled`, `toHaveBeenCalledWith`, `toMatch`
 - ✅ Mocks: `vi.fn()`, `vi.spyOn()`, `vi.mock()`
